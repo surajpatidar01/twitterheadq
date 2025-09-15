@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+chai or tweet
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="height: 30vh; flex-direction: column;">
+    <h1 class="text-center text-white">Welcome to chai or Django project</h1>
+    <a class="btn btn-primary mt-3" href="{% url 'tweet_create' %}">Create Tweet</a>
+</div>
+
+<div class="container mt-4">
+    {% if tweets %}
+        <!-- Horizontal Scrollable Container -->
+        <div style="display:flex; overflow-x:auto; gap:16px; padding-bottom:10px;">
+            {% for tweet in tweets %}
+                <div class="card" style="min-width:18rem; flex:0 0 auto;">
+                    {% if tweet.photo %}
+                        <img src="{{ tweet.photo.url }}"
+                             class="card-img-top img-fluid"
+                             style="max-height:200px; object-fit:cover;"
+                             alt="Tweet Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tweet.user.username }}</h5>
+                        <p class="card-text">{{ tweet.text }}</p>
+                        {% if tweet.user == user %}
+                        <a href="{% url 'tweet_edit' tweet.id %}" class="btn" style="background-color: green; color: white;">Edit</a>
+
+                       <a href="{% url 'tweet_delete' tweet.id %}" class="btn" style="background-color: red; color: white;">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No tweets available</p>
+    {% endif %}
+</div>
+{% endblock %}
